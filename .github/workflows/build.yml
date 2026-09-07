@@ -1,0 +1,30 @@
+name: Build HT1 Client Jar
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build the mod
+        run: ./gradlew build --no-daemon
+
+      - name: Upload the compiled jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: ht1-client-jar
+          path: build/libs/*.jar
